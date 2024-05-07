@@ -13,9 +13,9 @@ app.use(express.json())
 //Importa os arquivos de rotas criados para a funcionalidade da APIrest
 
 app.use(require('./routes/productRoute'))
-/*
-app.use(require('./routes'))
-*/
+
+app.use(require('./routes/genderRoute'))
+
 //Starta o servidor na porta escolhida
 
 app.listen(4000, () => console.log('Server started on port 4000'))

@@ -67,6 +67,46 @@ exports.getProductById = async(req, res) => {
     }
 }
 
+//Extrai os dados do banco de dados que está relacionado com a escrita SQL abaixo pelo gênero do produto
+
+exports.getProductByType = async(req,res) => {
+    try{
+        const existsResult = await database.pool.query({
+            text: 'SELECT EXISTS(SELECT * FROM Gender WHERE id = $1)',
+            values: [req.params.genderId]
+        })
+
+        if(!existsResult.rows[0].exists){
+            return res.status(404).json({error: 'Gender ID not found'})
+        }
+
+        const result = await database.pool.query({
+            text: `SELECT p.id, p.name, p.description, p.price, p.currency, 
+            p.quantity, p.cd_id, p.dvd_id, p.vinil_id, p.gender_id, p.updated_date,
+        
+            (SELECT ROW_TO_JSON(cd_obj) FROM (
+                SELECT id, name FROM cd WHERE id = p.cd_id
+            ) cd_obj) AS cd,
+            
+            (SELECT ROW_TO_JSON(dvd_obj) FROM (
+                SELECT id, name FROM dvd WHERE id = p.dvd_id
+            ) dvd_obj) AS dvd,
+            
+            (SELECT ROW_TO_JSON(vinil_obj) FROM (
+                SELECT id, name FROM vinil WHERE id = p.vinil_id
+            ) vinil_obj) AS vinil
+        
+        FROM product p
+        WHERE p.gender_id = $1`,
+            values: [req.params.genderId]
+        })
+        
+        return res.status(200).json(result.rows)
+    } catch(error) {
+        return res.status(500).json({ error: error.message})
+    }
+}
+
 //Cria um novo produto e adiciona os dados no banco
 
 exports.createProduct = async(req,res) => {
@@ -201,44 +241,6 @@ exports.deleteProduct= async(req, res) => {
 
         return res.status(204).send()
     }   catch(error){
-        return res.status(500).json({ error: error.message})
-    }
-}
-
-exports.getProductByType = async(req,res) => {
-    try{
-        const existsResult = await database.pool.query({
-            text: 'SELECT EXISTS(SELECT * FROM Gender WHERE id = $1)',
-            values: [req.params.genderId]
-        })
-
-        if(!existsResult.rows[0].exists){
-            return res.status(404).json({error: 'Gender ID not found'})
-        }
-
-        const result = await database.pool.query({
-            text: `SELECT p.id, p.name, p.description, p.price, p.currency, 
-            p.quantity, p.cd_id, p.dvd_id, p.vinil_id, p.gender_id, p.updated_date,
-        
-            (SELECT ROW_TO_JSON(cd_obj) FROM (
-                SELECT id, name FROM cd WHERE id = p.cd_id
-            ) cd_obj) AS cd,
-            
-            (SELECT ROW_TO_JSON(dvd_obj) FROM (
-                SELECT id, name FROM dvd WHERE id = p.dvd_id
-            ) dvd_obj) AS dvd,
-            
-            (SELECT ROW_TO_JSON(vinil_obj) FROM (
-                SELECT id, name FROM vinil WHERE id = p.vinil_id
-            ) vinil_obj) AS vinil
-        
-        FROM product p
-        WHERE p.gender_id = $1`,
-            values: [req.params.genderId]
-        })
-        
-        return res.status(200).json(result.rows)
-    } catch(error) {
         return res.status(500).json({ error: error.message})
     }
 }

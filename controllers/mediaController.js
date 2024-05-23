@@ -4,25 +4,26 @@ const database = require('../services/database')
 
 //Extrai os dados do banco de dados que está relacionado com a escrita SQL abaixo
 
-exports.getAllProducts = async(req,res) => {
+exports.getAllMedias = async(req,res) => {
     try{
         const result = await database.pool.query(`
         SELECT p.id, p.name, p.description, p.price, p.currency, 
-        p.quantity, p.cd_id, p.dvd_id, p.vinil_id, p.gender_id, p.updated_date,
-    
-        (SELECT ROW_TO_JSON(cd_obj) FROM (
-            SELECT id, name FROM cd WHERE id = p.cd_id
-        ) cd_obj) AS cd,
+        p.quantity, p.gender_id, p.artist_id, p.updated_date, type_id,
         
-        (SELECT ROW_TO_JSON(dvd_obj) FROM (
-            SELECT id, name FROM dvd WHERE id = p.dvd_id
-        ) dvd_obj) AS dvd,
-        
-        (SELECT ROW_TO_JSON(vinil_obj) FROM (
-            SELECT id, name FROM vinil WHERE id = p.vinil_id
-        ) vinil_obj) AS vinil
     
-    FROM product p
+        (SELECT ROW_TO_JSON(gender_obj) FROM (
+            SELECT id, name FROM gender WHERE id = p.gender_id
+        ) gender_obj) AS gender,
+
+        (SELECT ROW_TO_JSON(artist_obj) FROM (
+            SELECT id, name FROM artist WHERE id = p.artist_id
+        ) artist_obj) AS artist
+
+        (SELECT ROW_TO_JSON(type_obj) FROM (
+            SELECT id, name FROM type WHERE id = p.type_id
+        ) type_obj) AS type
+    
+    FROM media p
         `)
 
         return res.status(200).json(result.rows)
@@ -33,32 +34,32 @@ exports.getAllProducts = async(req,res) => {
 
 //Extrai os dados do banco de dados que está relacionado com a escrita SQL abaixo pelo ID do produto
 
-exports.getProductById = async(req, res) => {
+exports.getMediaById = async(req, res) => {
     try{
 
         const result = await database.pool.query({
-            text: `SELECT p.id, p.name, p.description, p.price, p.currency, 
-            p.quantity, p.cd_id, p.dvd_id, p.vinil_id, p.gender_id, p.updated_date,
+            text: `SELECT p.id, p.name, p.description, p.gender_id, p.artist_id, p.price, p.currency, 
+            p.quantity, p.updated_date, type_id,
         
-            (SELECT ROW_TO_JSON(cd_obj) FROM (
-                SELECT id, name FROM cd WHERE id = p.cd_id
-            ) cd_obj) AS cd,
-            
-            (SELECT ROW_TO_JSON(dvd_obj) FROM (
-                SELECT id, name FROM dvd WHERE id = p.dvd_id
-            ) dvd_obj) AS dvd,
-            
-            (SELECT ROW_TO_JSON(vinil_obj) FROM (
-                SELECT id, name FROM vinil WHERE id = p.vinil_id
-            ) vinil_obj) AS vinil
+            (SELECT ROW_TO_JSON(gender_obj) FROM (
+                SELECT id, name FROM gender WHERE id = p.gender_id
+            ) gender_obj) AS gender,
+    
+            (SELECT ROW_TO_JSON(artist_obj) FROM (
+                SELECT id, name FROM artist WHERE id = p.artist_id
+            ) artist_obj) AS artist
+
+            (SELECT ROW_TO_JSON(type_obj) FROM (
+                SELECT id, name FROM type WHERE id = p.type_id
+            ) type_obj) AS type
         
-        FROM product p
+        FROM media p
         WHERE p.id = $1`,
             values: [req.params.id]
         })
 
         if(result.rowCount == 0){
-            return res.status(404).json({error: "Product ID not found"})
+            return res.status(404).json({error: "media ID not found"})
         }
         
         return res.status(200).json(result.rows[0])
@@ -69,7 +70,7 @@ exports.getProductById = async(req, res) => {
 
 //Extrai os dados do banco de dados que está relacionado com a escrita SQL abaixo pelo gênero do produto
 
-exports.getProductByType = async(req,res) => {
+exports.getMediaByType = async(req,res) => {
     try{
         const existsResult = await database.pool.query({
             text: 'SELECT EXISTS(SELECT * FROM Gender WHERE id = $1)',
@@ -81,22 +82,22 @@ exports.getProductByType = async(req,res) => {
         }
 
         const result = await database.pool.query({
-            text: `SELECT p.id, p.name, p.description, p.price, p.currency, 
-            p.quantity, p.cd_id, p.dvd_id, p.vinil_id, p.gender_id, p.updated_date,
+            text: `SELECT p.id, p.name, p.description, p.gender_id, p.artist_id, p.price, p.currency, 
+            p.quantity, p.updated_date, type_id,
         
-            (SELECT ROW_TO_JSON(cd_obj) FROM (
-                SELECT id, name FROM cd WHERE id = p.cd_id
-            ) cd_obj) AS cd,
-            
-            (SELECT ROW_TO_JSON(dvd_obj) FROM (
-                SELECT id, name FROM dvd WHERE id = p.dvd_id
-            ) dvd_obj) AS dvd,
-            
-            (SELECT ROW_TO_JSON(vinil_obj) FROM (
-                SELECT id, name FROM vinil WHERE id = p.vinil_id
-            ) vinil_obj) AS vinil
+            (SELECT ROW_TO_JSON(gender_obj) FROM (
+                SELECT id, name FROM gender WHERE id = p.gender_id
+            ) gender_obj) AS gender,
+    
+            (SELECT ROW_TO_JSON(artist_obj) FROM (
+                SELECT id, name FROM artist WHERE id = p.artist_id
+            ) artist_obj) AS artist
+
+            (SELECT ROW_TO_JSON(type_obj) FROM (
+                SELECT id, name FROM type WHERE id = p.type_id
+            ) type_obj) AS type
         
-        FROM product p
+        FROM media p
         WHERE p.gender_id = $1`,
             values: [req.params.genderId]
         })
@@ -109,7 +110,7 @@ exports.getProductByType = async(req,res) => {
 
 //Cria um novo produto e adiciona os dados no banco
 
-exports.createProduct = async(req,res) => {
+exports.createMedia = async(req,res) => {
     try{
 
         if(!req.body.name){
@@ -121,12 +122,12 @@ exports.createProduct = async(req,res) => {
         }
 
         const existsResult = await database.pool.query({
-            text: 'SELECT EXISTS (SELECT * FROM product WHERE name = $1)',
+            text: 'SELECT EXISTS (SELECT * FROM media WHERE name = $1)',
             values: [req.body.name]
         })
 
         if(existsResult.rows[0].exists){
-            return res.status(409).json({error: `Product ${req.body.name} already exists`})
+            return res.status(409).json({error: `media ${req.body.name} already exists`})
         }
 
         if(!req.body.gender_id){
@@ -144,23 +145,22 @@ exports.createProduct = async(req,res) => {
 
         const result = await database.pool.query({
             text: `
-            INSERT INTO product 
-            (name, description, price, currency, quantity, active, cd_id, vinil_id, dvd_id, gender_id) 
+            INSERT INTO media 
+            (name, description, gender_id, artist_id, price, currency, quantity, type_id) 
             VALUES
             (
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+                $1, $2, $3, $4, $5, $6, $7, $8
             ) RETURNING *`,
             values: [
                 req.body.name,
                 req.body.description ? req.body.description : null,
+                req.body.gender_id,
+                req.body.artist_id,
                 req.body.price,
-                req.body.currency ? req.body.currency : 'BRL',
+                req.body.currency ? req.body.currency : 'USD',
                 req.body.quantity ? req.body.quantity : 0,
-                'active' in req.body ? req.body.active : true,
-                req.body.cd_id,
-                req.body.vinil_id,
-                req.body.dvd_id,
-                req.body.gender_id
+                req.body.type_id
+
             ]
         })
 
@@ -172,7 +172,7 @@ exports.createProduct = async(req,res) => {
 
 //Atualiza algum produto a partir do ID
 
-exports.updateProduct = async(req,res) => {
+exports.updateMedia = async(req,res) => {
     try{
         if(!req.body.name || !req.body.price || !req.body.gender_id ){
             return res.status(422).json({error: 'All fields are required'})
@@ -188,36 +188,32 @@ exports.updateProduct = async(req,res) => {
         }
 
         const result = await database.pool.query({
-            text: `UPDATE product 
+            text: `UPDATE media 
             SET 
             name = $1,
             description = $2,
-            price = $3,
-            currency = $4,
-            quantity = $5,
-            active = $6,
-            cd_id = $7, 
-            dvd_id = $8,
-            vinil_id = $9,
-            gender_id = $10
-            WHERE id = $11 RETURNING *`,
+            gender_id = $3,
+            artist_id = $4,
+            price = $5,
+            currency = $6,
+            quantity = $7,
+            type_id = $8
+            WHERE id = $9 RETURNING *`,
             values: [
                 req.body.name,
                 req.body.description ? req.body.description : null,
+                req.body.gender_id,
+                req.body.artist_id,
                 req.body.price,
-                req.body.currency ? req.body.currency : 'BRL',
+                req.body.currency ? req.body.currency : 'USD',
                 req.body.quantity ? req.body.quantity : 0,
-                'active' in req.body ? req.body.active : true,
-                req.body.cd_id,
-                req.body.vinil_id,
-                req.body.dvd_id,
-                req.body.gender_id = req.body.gender_id,
+                req.body.type_id,
                 req.params.id
             ]
         })
 
         if(result.rowCount == 0){
-            return res.status(404).json({error: 'Product not found'})
+            return res.status(404).json({error: 'media not found'})
         }
 
         return res.status(200).json(result.rows[0])
@@ -228,15 +224,15 @@ exports.updateProduct = async(req,res) => {
 
 //Deleta algum produto pelo ID
 
-exports.deleteProduct= async(req, res) => {
+exports.deleteMedia= async(req, res) => {
     try{
         const result = await database.pool.query({
-            text: `DELETE FROM product WHERE id = $1`,
+            text: `DELETE FROM media WHERE id = $1`,
             values: [req.params.id]
         })
 
         if(result.rowCount == 0){
-            return res.status(404).json({error: 'Product ID not found'})
+            return res.status(404).json({error: 'media ID not found'})
         }
 
         return res.status(204).send()

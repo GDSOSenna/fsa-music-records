@@ -12,9 +12,13 @@ app.use(express.json())
 
 //Importa os arquivos de rotas criados para a funcionalidade da APIrest
 
-app.use(require('./routes/productRoute'))
+app.use(require('./routes/mediaRoute'))
 
 app.use(require('./routes/genderRoute'))
+
+app.use(require('./routes/artistRoute'))
+
+app.use(require('./routes/typeRoute'))
 
 //Starta o servidor na porta escolhida
 

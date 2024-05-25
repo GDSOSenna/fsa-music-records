@@ -9,7 +9,6 @@ exports.getAllMedias = async(req,res) => {
         const result = await database.pool.query(`
         SELECT p.id, p.name, p.description, p.price, p.currency, 
         p.quantity, p.gender_id, p.artist_id, p.updated_date, type_id,
-        
     
         (SELECT ROW_TO_JSON(gender_obj) FROM (
             SELECT id, name FROM gender WHERE id = p.gender_id
@@ -17,7 +16,7 @@ exports.getAllMedias = async(req,res) => {
 
         (SELECT ROW_TO_JSON(artist_obj) FROM (
             SELECT id, name FROM artist WHERE id = p.artist_id
-        ) artist_obj) AS artist
+        ) artist_obj) AS artist,
 
         (SELECT ROW_TO_JSON(type_obj) FROM (
             SELECT id, name FROM type WHERE id = p.type_id
@@ -47,7 +46,7 @@ exports.getMediaById = async(req, res) => {
     
             (SELECT ROW_TO_JSON(artist_obj) FROM (
                 SELECT id, name FROM artist WHERE id = p.artist_id
-            ) artist_obj) AS artist
+            ) artist_obj) AS artist,
 
             (SELECT ROW_TO_JSON(type_obj) FROM (
                 SELECT id, name FROM type WHERE id = p.type_id
@@ -91,7 +90,7 @@ exports.getMediaByType = async(req,res) => {
     
             (SELECT ROW_TO_JSON(artist_obj) FROM (
                 SELECT id, name FROM artist WHERE id = p.artist_id
-            ) artist_obj) AS artist
+            ) artist_obj) AS artist,
 
             (SELECT ROW_TO_JSON(type_obj) FROM (
                 SELECT id, name FROM type WHERE id = p.type_id

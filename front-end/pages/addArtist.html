@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Records</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+    <header>
+        <div class="nav-icon">
+            <img src="../svg/menu-icon.svg" alt="menu-icon">
+        </div>
+        <div class="logo">
+            <img src="../svg/logo.svg" alt="logo">
+        </div>
+    </header>
+    <main>
+        <div class="add-div">
+            <div class="add">
+                
+                <div class="table-space">
+                    <table>
+                        <thead>
+                            <tr id="th">
+                                <th class="id">ID</th>
+                                <th class="name">Nome</th>
+                                <th class="edit">Editar</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                        <!--
+                            <tr>
+                                <td class="id">1</td>
+                                <td class="name">Bons Momentos</td>
+                                <td class="description">Tim Maia Song</td>
+                                <td class="artist">Tim Maia</td>
+                                <td class="gender">MPB</td>
+                                <td class="type">Vinil</td>
+                                <td class="price">R$ 10,00</td>
+                                <td class="edit">
+                                    <button type="button">
+                                        <span class="material-symbols-outlined">edit</span>
+                                    </button>
+                                    <button type="button">
+                                        <span class="material-symbols-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        -->
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+            <form class="data" method="post">
+                <input class="name-input" type="text" placeholder="Nome" id="name-input">             
+                <button type="submit" class="button-add">Adicionar</button>
+            </form>
+            
+        </div>
+        
+    </main>
+    <footer></footer>
+
+    <script src="../src/artist.js"></script>
+
+</body>
+</html>

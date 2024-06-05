@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+body{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    background-color: #EDEDED;
+}
+
+header{
+    display: flex;
+    width: 100%;
+    height: 100px;
+}
+
+.nav-icon{
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    align-items: center;
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 25px;
+    scale: 0.1;
+}
+
+main{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+    height: auto;
+    gap: 100px;
+    margin-top: 100px;
+}
+
+.add-div{
+    display: flex;
+    flex-direction: column ;
+    align-items: center;
+    gap: 50px;
+}
+
+.data{
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    gap: 10px;
+    align-items: center;
+}
+
+#name-input{
+    padding: 5px 80px 5px 80px;
+    font-size: 16px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 10px;
+    text-align: center;
+    width: auto;
+}
+
+#description-input{
+    padding: 50px 0;
+    font-size: 16px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.art-gen, .pri-quant{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 340px;
+    gap: 20px;
+}
+
+#gender-select, #type-select{
+    width: 160px;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+#price-input, #quantity-input{
+    width: 156px;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+#artist-select{
+    width: 340px;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+.button-add{
+	background-color:#d9d9d9;
+	border-radius:10px;
+	border:1px solid #000000;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:18px;
+	padding:11px 15px;
+	text-decoration:none;
+    width: 150px;
+    align-content: center;
+    margin-top: 50px;
+}
+
+.button-add:hover{
+    background-color: #807e7e;
+    color: #d9d9d9;
+}
+
+.table-space{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    width: auto;
+    background-color: #FBFBFB;
+    border-radius: 20px;
+    margin-right: 100px;
+}
+
+table{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+tr{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+
+th, td{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#th{
+    border-bottom: 2px #000000;
+}
+
+.id{
+    width: 100px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.name{
+    width: 200px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.description{
+    width: 300px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.artist{
+    width: 100px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.gender{
+    width: 100px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.type{
+    width: 100px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.price{
+    width: 100px;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.edit{
+    width: 100px;
+    gap: 10px;
+}

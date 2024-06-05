@@ -7,7 +7,7 @@ const database = require('../services/database')
 exports.getAllType = async(req,res) => {
     try{
         const result = await database.pool.query(`
-        SELECT g.id, g.name, g.created_date
+        SELECT g.id, g.name, g.description, g.created_date
     
         FROM type g
         `)
@@ -24,7 +24,7 @@ exports.getTypeById = async(req, res) => {
     try{
 
         const result = await database.pool.query({
-            text: `SELECT g.id, g.name, g.created_date
+            text: `SELECT g.id, g.name, g.description, g.created_date
         
         FROM type g
         WHERE g.id = $1`,
@@ -62,11 +62,12 @@ exports.createType = async(req,res) => {
         const result = await database.pool.query({
             text: `
             INSERT INTO type 
-            (name)
+            (name, description)
             VALUES
-            ($1) RETURNING *`,
+            ($1, $2) RETURNING *`,
             values: [
-                req.body.name
+                req.body.name,
+                req.body.description
             ]
         })
 
@@ -96,10 +97,12 @@ exports.updateType = async(req,res) => {
         const result = await database.pool.query({
             text: `UPDATE type 
             SET 
-            name = $1
-            WHERE id = $2 RETURNING *`,
+            name = $1,
+            description = $2
+            WHERE id = $3 RETURNING *`,
             values: [
                 req.body.name,
+                req.body.description,
                 req.params.id
             ]
         })

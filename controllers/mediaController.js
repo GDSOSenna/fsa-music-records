@@ -11,15 +11,15 @@ exports.getAllMedias = async(req,res) => {
         p.quantity, p.gender_id, p.artist_id, p.updated_date, type_id,
     
         (SELECT ROW_TO_JSON(gender_obj) FROM (
-            SELECT id, name FROM gender WHERE id = p.gender_id
+            SELECT name FROM gender WHERE id = p.gender_id
         ) gender_obj) AS gender,
 
         (SELECT ROW_TO_JSON(artist_obj) FROM (
-            SELECT id, name FROM artist WHERE id = p.artist_id
+            SELECT name FROM artist WHERE id = p.artist_id
         ) artist_obj) AS artist,
 
         (SELECT ROW_TO_JSON(type_obj) FROM (
-            SELECT id, name FROM type WHERE id = p.type_id
+            SELECT name FROM type WHERE id = p.type_id
         ) type_obj) AS type
     
     FROM media p
@@ -41,15 +41,14 @@ exports.getMediaById = async(req, res) => {
             p.quantity, p.updated_date, type_id,
         
             (SELECT ROW_TO_JSON(gender_obj) FROM (
-                SELECT id, name FROM gender WHERE id = p.gender_id
-            ) gender_obj) AS gender,
-    
+                SELECT name FROM gender WHERE id = p.gender_id
+            ) gender_obj) AS gende
             (SELECT ROW_TO_JSON(artist_obj) FROM (
-                SELECT id, name FROM artist WHERE id = p.artist_id
+                SELECT name FROM artist WHERE id = p.artist_id
             ) artist_obj) AS artist,
 
             (SELECT ROW_TO_JSON(type_obj) FROM (
-                SELECT id, name FROM type WHERE id = p.type_id
+                SELECT name FROM type WHERE id = p.type_id
             ) type_obj) AS type
         
         FROM media p
@@ -156,7 +155,7 @@ exports.createMedia = async(req,res) => {
                 req.body.gender_id,
                 req.body.artist_id,
                 req.body.price,
-                req.body.currency ? req.body.currency : 'USD',
+                req.body.currency ? req.body.currency : 'BRL',
                 req.body.quantity ? req.body.quantity : 0,
                 req.body.type_id
 

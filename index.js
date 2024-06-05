@@ -10,6 +10,12 @@ const app = express()
 
 app.use(express.json())
 
+//Importa Cors
+
+const cors = require('cors')
+
+app.use(cors())
+
 //Importa os arquivos de rotas criados para a funcionalidade da APIrest
 
 app.use(require('./routes/mediaRoute'))
